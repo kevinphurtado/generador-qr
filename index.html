@@ -3,134 +3,1092 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador Códigos QR Personalizados</title>
+  <title>Generador de Códigos QR Personalizados</title>
   
   <meta name="description" content="Crea códigos QR personalizados gratis y al instante. Añade tu logo, elige colores y genera QR para sitios web, Wi-Fi, Instagram, WhatsApp y más. Fácil y sin registros.">
   <meta name="keywords" content="generador qr, código qr, qr gratis, qr con logo, qr personalizado, choco creativo, qr para wifi, qr para instagram">
 
-  <meta property="og:title" content="Generador de Códigos QR Personalizados y Gratuitos">
+  <meta property="og:title" content="Generador de Códigos QR Personalizados">
   <meta property="og:description" content="Crea códigos QR únicos con tu logo. Ideal para menús, tarjetas de presentación y eventos. Rápido, gratuito y de código abierto.">
   <meta property="og:image" content="https://chococreativo.com.co/proyectos/qr-preview.png">
   <meta property="og:url" content="https://chococreativo.com.co/">
   <meta property="og:type" content="website">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-  <script src="https://www.paypal.com/sdk/js?client-id=BAAowbkGbCrbEnx8RrBHz8qELfBlAeQLKHQ0XBqpc1w2g0btRFSOg8iLhzqU6m2kAwiBtrKK1WRGCTNuco&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
-  <style>
-    @import url('https://rsms.me/inter/inter.css');
-    body { font-family: 'Inter', sans-serif; }
-    
-    .qr-card {
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-      padding: 1rem; background-color: white; border-radius: 1rem; border: 1px solid #e5e7eb;
-      text-align: center; gap: 0.5rem; transition: all 0.3s; cursor: pointer; height: 9rem;
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-up': 'slideUp 0.3s ease-out',
+            'pulse-soft': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(10px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            }
+          }
+        }
+      }
     }
-    .dark .qr-card { background-color: #1f2937; border-color: #374151; }
-    .qr-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); border-color: #6366f1; }
-    .dark .qr-card:hover { border-color: #818cf8; }
-    .qr-card-icon { width: 40px; height: 40px; margin-bottom: 0.25rem; flex-shrink: 0; }
-    .qr-card-title { font-weight: 700; color: #1f2937; }
-    .dark .qr-card-title { color: white; }
-    .qr-card-subtitle { font-size: 0.875rem; line-height: 1.25rem; color: #6b7280; }
-    .dark .qr-card-subtitle { color: #9ca3af; }
-
-    .frame-thumbnail { border: 2px solid transparent; border-radius: 0.5rem; padding: 4px; cursor: pointer; transition: all 0.2s; background-color: #f3f4f6; }
-    .dark .frame-thumbnail { background-color: #374151; }
-    .frame-thumbnail.selected { border-color: #6366f1; }
-    .frame-thumbnail img { width: 100%; height: auto; border-radius: 0.25rem; }
-
-    #final-qr-preview { position: relative; display: flex; align-items: center; justify-content: center; }
-    #final-qr-preview .qr-frame-text { position: absolute; font-family: 'Inter', sans-serif; font-weight: 600; text-align: center; white-space: nowrap; }
-    #final-qr-preview canvas, #final-qr-preview img { position: absolute !important; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .modal-content { animation: fadeIn 0.3s ease-out; }
+  </script>
+  <script src="https://unpkg.com/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      --color-primary: #4f46e5;
+      --color-primary-light: #6366f1;
+      --color-primary-dark: #4338ca;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .qr-type-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      background-color: white;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+      gap: 0.75rem;
+      transition: all 0.3s;
+      cursor: pointer;
+      height: 10rem;
+    }
+    
+    .dark .qr-type-card {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+    
+    .qr-type-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.1), 0 4px 6px -4px rgba(79, 70, 229, 0.1);
+    }
+    
+    .dark .qr-type-card:hover {
+      border-color: #818cf8;
+    }
+    
+    .qr-type-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .phone-mockup {
+      position: relative;
+      width: 320px;
+      height: 640px;
+      background: #1f2937;
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      padding: 16px;
+      border: 4px solid #374151;
+    }
+    
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .dark .phone-screen {
+      background: #111827;
+    }
+    
+    .customization-panel {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .customization-panel.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+    
+    .customization-panel.expanded {
+      max-height: 500px;
+      opacity: 1;
+    }
+    
+    .color-option {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .color-option:hover {
+      transform: scale(1.1);
+    }
+    
+    .color-option.active {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px white, 0 0 0 5px var(--color-primary);
+    }
+    
+    .dark .color-option.active {
+      box-shadow: 0 0 0 3px #1f2937, 0 0 0 5px var(--color-primary);
+    }
+    
+    .logo-preview {
+      transition: all 0.3s ease;
+    }
+    
+    .logo-preview:hover {
+      transform: scale(1.05);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .modal-overlay {
+      backdrop-filter: blur(4px);
+    }
+    
+    .template-option {
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    
+    .template-option:hover {
+      border-color: var(--color-primary-light);
+    }
+    
+    .template-option.selected {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
   </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
-  <header class="bg-white dark:bg-gray-800 p-4 flex justify-between items-center sticky top-0 z-20 shadow-sm">
-    <h1 class="text-2xl font-bold text-indigo-600" data-translate="header_title">Gestor de QR</h1>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+  <header class="bg-white dark:bg-gray-800 p-4 flex justify-between items-center sticky top-0 z-30 shadow-sm transition-colors duration-300">
     <div class="flex items-center gap-2">
-      <button id="lang-toggle" class="px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 font-semibold text-xs">EN</button>
-      <button id="toggle-dark" class="px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700">🌙/☀️</button>
+      <div class="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center">
+        <i class="fas fa-qrcode text-white text-xl"></i>
+      </div>
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent" data-translate="header_title">Generador QR Moderno</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="lang-toggle" class="px-3 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium text-sm transition-colors hover:bg-gray-300 dark:hover:bg-gray-600">EN</button>
+      <button id="toggle-dark" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 transition-colors hover:bg-gray-300 dark:hover:bg-gray-600">
+        <i class="fas fa-moon text-gray-700 dark:text-yellow-400"></i>
+      </button>
     </div>
   </header>
 
-  <main class="flex-grow container mx-auto p-6 space-y-16">
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      <div class="space-y-6">
-        <h2 class="text-3xl font-bold" data-translate="generator_title">1. Seleccione un tipo de código QR</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-5" id="qr-type-selector">
-            <button data-modal-id="modal-web" class="qr-card">
-              <svg class="qr-card-icon text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9"></path></svg>
-              <span class="qr-card-title" data-translate="card_web_title">Sitio web</span><p class="qr-card-subtitle" data-translate="card_web_subtitle"></p>
-            </button>
-            <button data-modal-id="modal-instagram" class="qr-card">
-                <svg class="qr-card-icon text-pink-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-              <span class="qr-card-title" data-translate="card_insta_title">Instagram</span><p class="qr-card-subtitle" data-translate="card_insta_subtitle"></p>
-            </button>
-            <button data-modal-id="modal-whatsapp" class="qr-card">
-                <svg class="qr-card-icon text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.908 6.161l.217.324-1.251 4.566 4.647-1.225.353.215z"></path></svg>
-              <span class="qr-card-title" data-translate="card_wa_title">WhatsApp</span><p class="qr-card-subtitle" data-translate="card_wa_subtitle"></p>
-            </button>
-            <button data-modal-id="modal-wifi" class="qr-card">
-                <svg class="qr-card-icon text-sky-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.136 11.886c3.87-3.87 10.154-3.87 14.024 0M19.5 8.732c-5.996-5.996-15.71-5.996-21.706 0M12 20.25h.008v.008H12v-.008z"></path></svg>
-              <span class="qr-card-title" data-translate="card_wifi_title">Wi-Fi</span><p class="qr-card-subtitle" data-translate="card_wifi_subtitle"></p>
-            </button>
-            <button data-modal-id="modal-call" class="qr-card">
-              <svg class="qr-card-icon text-red-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 6.75z"></path></svg>
-              <span class="qr-card-title" data-translate="card_call_title"></span><p class="qr-card-subtitle" data-translate="card_call_subtitle"></p>
-            </button>
-            <button data-modal-id="modal-email" class="qr-card">
-              <svg class="qr-card-icon text-yellow-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
-              <span class="qr-card-title" data-translate="card_email_title"></span><p class="qr-card-subtitle" data-translate="card_email_subtitle"></p>
-            </button>
-        </div>
-        <div class="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8"><h2 class="text-2xl font-bold mb-4" data-translate="benefits_title"></h2><p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="benefits_subtitle"></p><ul class="space-y-3"><li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span data-translate="benefit_1"></span></li><li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span data-translate="benefit_2"></span></li><li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span data-translate="benefit_3"></span></li><li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span data-translate="benefit_4"></span></li></ul></div>
-      </div>
-      <div class="flex flex-col items-center justify-start pt-8 lg:pt-0">
-        <div class="w-80 h-[590px] bg-gray-900 dark:bg-black rounded-[40px] shadow-2xl p-3.5 border-4 border-gray-700">
-          <div class="w-full h-full bg-white dark:bg-gray-100 rounded-[28px] overflow-hidden">
-              <div class="flex items-center justify-center h-full p-4">
-                  <div id="final-qr-preview"></div>
-                  <div id="qr-placeholder" class="text-center text-gray-500 px-8"><p class="font-bold text-lg" data-translate="qr_placeholder"></p></div>
+  <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+    <div class="text-center mb-12 animate-fade-in">
+      <h2 class="text-4xl font-bold mb-4">Generador de <span class="text-primary-600">Códigos QR</span></h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Crea códigos QR personalizados con tu logo y colores favoritos. Totalmente gratis y sin necesidad de registro.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-colors duration-300">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+            <i class="fas fa-qrcode text-primary-600"></i>
+            <span data-translate="generator_title">Selecciona un tipo de código QR</span>
+          </h3>
+          <div class="grid grid-cols-2 gap-4" id="qr-type-selector">
+            <div data-modal-id="modal-web" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-blue-100 text-blue-600">
+                <i class="fas fa-globe text-xl"></i>
               </div>
+              <span class="font-semibold" data-translate="card_web_title">Sitio web</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_web_subtitle">Enlace a cualquier URL</p>
+            </div>
+            
+            <div data-modal-id="modal-instagram" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-pink-100 text-pink-600">
+                <i class="fab fa-instagram text-xl"></i>
+              </div>
+              <span class="font-semibold" data-translate="card_insta_title">Instagram</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_insta_subtitle">Comparte tu perfil</p>
+            </div>
+            
+            <div data-modal-id="modal-whatsapp" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-green-100 text-green-600">
+                <i class="fab fa-whatsapp text-xl"></i>
+              </div>
+              <span class="font-semibold" data-translate="card_wa_title">WhatsApp</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_wa_subtitle">Recibe mensajes</p>
+            </div>
+            
+            <div data-modal-id="modal-wifi" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-sky-100 text-sky-600">
+                <i class="fas fa-wifi text-xl"></i>
+              </div>
+              <span class="font-semibold" data-translate="card_wifi_title">Wi-Fi</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_wifi_subtitle">Conéctate a una red</p>
+            </div>
+            
+            <div data-modal-id="modal-call" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-red-100 text-red-600">
+                <i class="fas fa-phone text-xl"></i>
+              </div>
+              <span class="font-semibold" data-translate="card_call_title">Llamar</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_call_subtitle">Genera un QR para llamar</p>
+            </div>
+            
+            <div data-modal-id="modal-email" class="qr-type-card card-hover">
+              <div class="qr-type-icon bg-amber-100 text-amber-600">
+                <i class="fas fa-envelope text-xl"></i>
+              </div>
+              <span class="font-semibold" data-translate="card_email_title">Email</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_email_subtitle">Envía un correo</p>
+            </div>
           </div>
         </div>
-        <div class="mt-8 flex flex-col items-center gap-4 w-full max-w-sm">
-          <button id="download-png" class="w-full px-5 py-2 rounded-lg bg-gray-800 text-white shadow-lg hover:bg-black transition-colors duration-200 dark:bg-indigo-600 dark:hover:bg-indigo-700" data-translate="download_button"></button>
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-xs w-full">
-            <div class="flex flex-col items-center gap-1"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg><span data-translate="info_1"></span></div>
-            <div class="flex flex-col items-center gap-1"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span data-translate="info_2"></span></div>
-            <div class="flex flex-col items-center gap-1"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg><span data-translate="info_3"></span></div>
-            <div class="flex flex-col items-center gap-1"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span data-translate="info_4"></span></div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mt-6 transition-colors duration-300">
+          <div class="flex justify-between items-center cursor-pointer" id="customization-toggle">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+              <i class="fas fa-paint-brush text-primary-600"></i>
+              <span data-translate="customization_title">Personalización</span>
+            </h3>
+            <i class="fas fa-chevron-down text-gray-400 transition-transform" id="customization-arrow"></i>
           </div>
+          
+          <div class="customization-panel collapsed mt-4" id="customization-panel">
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2" data-translate="customization_color_label">Color del código QR</label>
+              <div class="flex gap-2">
+                <div class="color-option bg-black active" data-color="#000000"></div>
+                <div class="color-option bg-primary-600" data-color="#4f46e5"></div>
+                <div class="color-option bg-red-600" data-color="#dc2626"></div>
+                <div class="color-option bg-green-600" data-color="#16a34a"></div>
+                <div class="color-option bg-blue-600" data-color="#2563eb"></div>
+                <div class="color-option bg-purple-600" data-color="#9333ea"></div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2" data-translate="customization_dots_label">Forma de los puntos</label>
+              <div class="flex gap-4">
+                <div class="flex items-center gap-2">
+                  <input type="radio" id="dots-rounded" name="dots-style" value="rounded" checked class="rounded-full">
+                  <label for="dots-rounded" class="text-sm" data-translate="dots_rounded">Redondeados</label>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="radio" id="dots-square" name="dots-style" value="square" class="rounded-full">
+                  <label for="dots-square" class="text-sm" data-translate="dots_square">Cuadrados</label>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="radio" id="dots-dot" name="dots-style" value="dot" class="rounded-full">
+                  <label for="dots-dot" class="text-sm" data-translate="dots_dot">Puntos</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Plantillas</label>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="template-option selected p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="default">
+                  <div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center">
+                    <div class="w-10 h-10 border-2 border-gray-400 rounded"></div>
+                  </div>
+                  <p class="text-xs text-center mt-1">Default</p>
+                </div>
+                <div class="template-option p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="frame">
+                  <div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center relative">
+                    <div class="w-10 h-10 border-2 border-gray-400 rounded"></div>
+                    <div class="absolute bottom-1 left-0 right-0 h-3 bg-gray-300 dark:bg-gray-600 mx-2 rounded-sm"></div>
+                  </div>
+                  <p class="text-xs text-center mt-1">Con marco</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-xl p-1">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 flex flex-col items-center transition-colors duration-300">
+            <div class="phone-mockup mb-8">
+              <div class="phone-screen">
+                <div id="final-qr-preview" class="w-full h-full flex items-center justify-center p-4"></div>
+                <div id="qr-placeholder" class="text-center text-gray-500 px-8 absolute">
+                  <i class="fas fa-qrcode text-5xl mb-4 text-gray-300"></i>
+                  <p class="font-bold text-lg mb-2" data-translate="qr_placeholder">Elige un tipo de código QR</p>
+                  <p class="text-sm">Selecciona una opción del panel izquierdo para comenzar</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="w-full max-w-md">
+              <button id="download-png" class="w-full px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold shadow-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-download"></i>
+                <span data-translate="download_button">Descargar QR</span>
+              </button>
+              
+              <div class="grid grid-cols-2 gap-4 mt-6">
+                <button id="share-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center gap-2">
+                  <i class="fas fa-share-alt"></i>
+                  <span>Compartir</span>
+                </button>
+                <button id="copy-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center gap-2">
+                  <i class="fas fa-copy"></i>
+                  <span>Copiar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-16 transition-colors duration-300">
+      <h2 class="text-3xl font-bold text-center mb-2" data-translate="benefits_title">Beneficios del Generador QR</h2>
+      <p class="text-gray-600 dark:text-gray-300 text-center mb-8 max-w-3xl mx-auto" data-translate="benefits_subtitle">Crea códigos QR estáticos y personalizados de forma rápida y gratuita. Ideal para tarjetas de presentación, menús, eventos y más.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center transition-colors duration-300">
+          <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-infinity text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2" data-translate="benefit_1">Códigos QR ilimitados</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Genera tantos códigos QR como necesites sin límites</p>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center transition-colors duration-300">
+          <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-image text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2" data-translate="benefit_2">Personalización de logos</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Añade tu logo para personalizar y brandear tus QR</p>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center transition-colors duration-300">
+          <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-user-secret text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2" data-translate="benefit_3">No requiere registro</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Usa nuestro generador sin necesidad de crear una cuenta</p>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center transition-colors duration-300">
+          <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-lock-open text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2" data-translate="benefit_4">Totalmente gratuito</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Código abierto y completamente gratuito para siempre</p>
         </div>
       </div>
     </section>
   </main>
   
-  <footer class="bg-white dark:bg-gray-800 text-center p-4 text-sm text-gray-600 dark:text-gray-300 mt-16">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>&copy; 2025 <span data-translate="footer_developed_by"></span> <a href="https://chococreativo.com.co/proyectos" target="_blank" rel="noopener noreferrer">Chocó Creativo🖤</a></p>
-        <div class="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
-            <a href="#" id="privacy-link" class="hover:text-indigo-500" data-translate="footer_privacy"></a>
-            <a href="#" id="terms-link" class="hover:text-indigo-500" data-translate="footer_terms"></a>
-            <button id="donate-button" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600" data-translate="footer_donate"></button>
-        </div>
+  <footer class="bg-white dark:bg-gray-800 text-center p-6 text-gray-600 dark:text-gray-300 transition-colors duration-300">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="text-sm">&copy; 2025 <span data-translate="footer_developed_by">Desarrollado por</span> <a href="https://chococreativo.com.co/proyectos" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 font-medium transition-colors">Chocó Creativo</a> 🖤</p>
+      <div class="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
+        <a href="#" id="privacy-link" class="text-sm hover:text-primary-600 transition-colors" data-translate="footer_privacy">Política de Privacidad</a>
+        <a href="#" id="terms-link" class="text-sm hover:text-primary-600 transition-colors" data-translate="footer_terms">Términos y Condiciones</a>
+        <a href="https://www.paypal.com/ncp/payment/P5L5PMJN2J43Q" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           id="donate-button"
+           class="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out text-sm flex items-center gap-2 animate-pulse-soft"
+           data-translate="footer_donate">
+          <i class="fas fa-heart"></i>
+          <span>Donar</span>
+        </a>
+      </div>
     </div>
   </footer>
 
-  <div id="modal-container"><<div id="paypal-container-A99FKDAC3VML2"></div>
-<script>
-  paypal.HostedButtons({
-    hostedButtonId: "A99FKDAC3VML2",
-  }).render("#paypal-container-A99FKDAC3VML2")
-</script></div>
+  <div id="modal-container"></div>
   
-  <script src="script.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Variables globales
+      let currentQRContent = '';
+      let selectedLogo = null;
+      let currentLanguage = 'es';
+      let qrCodeInstance = null;
+      let currentColor = '#000000';
+      let currentDotStyle = 'rounded';
+      let currentTemplate = 'default';
+
+      const qrPlaceholder = document.getElementById('qr-placeholder');
+      const finalQrPreview = document.getElementById('final-qr-preview');
+      const modalContainer = document.getElementById('modal-container');
+
+      // Traducciones
+      const translations = {
+        es: {
+          page_title: "Generador de Códigos QR Personalizados",
+          header_title: "Generador QR",
+          generator_title: "1. Seleccione tipo de código QR",
+          customization_title: "Personalización",
+          customization_color_label: "Color del código QR",
+          customization_dots_label: "Forma de los puntos",
+          dots_rounded: "Redondeados",
+          dots_square: "Cuadrados",
+          dots_dot: "Puntos",
+          card_web_title: "Sitio web",
+          card_web_subtitle: "Enlace a cualquier URL.",
+          card_insta_title: "Instagram",
+          card_insta_subtitle: "Comparta su perfil.",
+          card_wa_title: "WhatsApp",
+          card_wa_subtitle: "Reciba mensajes.",
+          card_wifi_title: "Wi-Fi",
+          card_wifi_subtitle: "Conéctese a una red.",
+          card_call_title: "Llamar",
+          card_call_subtitle: "Genere un QR para llamar.",
+          card_email_title: "Email",
+          card_email_subtitle: "Envíe un correo electrónico.",
+          qr_placeholder: "Elija un tipo de código QR a la izquierda",
+          download_button: "Descargar QR",
+          benefits_title: "Beneficios del Generador QR",
+          benefits_subtitle: "Cree códigos QR estáticos y personalizados de forma rápida y gratuita. Ideal para tarjetas de presentación, menús, eventos y mucho más, sin necesidad de ser un experto.",
+          benefit_1: "Códigos QR estáticos ilimitados",
+          benefit_2: "Personalización de logos",
+          benefit_3: "No requiere registro",
+          benefit_4: "Totalmente gratuito y de código abierto",
+          footer_developed_by: "Desarrollado por",
+          footer_privacy: "Política de Privacidad",
+          footer_terms: "Términos y Condiciones",
+          footer_donate: "Donar",
+          modal_config_web: "Configurar QR de Sitio Web",
+          modal_url_label: "URL del sitio web",
+          modal_config_insta: "Configurar QR de Instagram",
+          modal_user_label: "Nombre de usuario (sin @)",
+          modal_config_wa: "Configurar QR de WhatsApp",
+          modal_msg_label: "Mensaje (opcional)",
+          modal_config_wifi: "Configurar QR de Wi-Fi",
+          modal_ssid_label: "Nombre de la Red (SSID)",
+          modal_pass_label: "Contraseña",
+          modal_encrypt_label: "Tipo de Cifrado",
+          modal_config_call: "Configurar QR de Llamada",
+          modal_country_code_label: "Código de País",
+          modal_phone_num_label: "Número de Teléfono",
+          modal_wa_phone_num_label: "Número de Teléfono",
+          modal_config_email: "Configurar QR de Email",
+          modal_email_addr_label: "Dirección de correo",
+          modal_subject_label: "Asunto",
+          modal_body_label: "Cuerpo del mensaje",
+          modal_close_button: "Cerrar",
+          modal_generate_button: "Generar QR",
+          frame_logo_title: "Logo (Opcional)",
+          privacy_title: "Política de Privacidad",
+          privacy_text: "Esta aplicación es de código abierto y no almacena ningún dato ingresado por el usuario. Toda la generación de códigos QR se realiza en el lado del cliente (en su navegador).",
+          terms_title: "Términos y Condiciones",
+          terms_text: "El uso de este servicio es gratuito. Usted es responsable del contenido que genera. No se permite el uso para fines ilícitos.",
+        },
+        en: {
+          page_title: "Custom QR Code Generator",
+          header_title: "QR Generator",
+          generator_title: "1. Select a QR code type",
+          customization_title: "Customization",
+          customization_color_label: "QR code color",
+          customization_dots_label: "Dot shape",
+          dots_rounded: "Rounded",
+          dots_square: "Square",
+          dots_dot: "Dots",
+          card_web_title: "Website",
+          card_web_subtitle: "Link to any URL.",
+          card_insta_title: "Instagram",
+          card_insta_subtitle: "Share your profile.",
+          card_wa_title: "WhatsApp",
+          card_wa_subtitle: "Receive messages.",
+          card_wifi_title: "Wi-Fi",
+          card_wifi_subtitle: "Connect to a network.",
+          card_call_title: "Call",
+          card_call_subtitle: "Generate a QR to call.",
+          card_email_title: "Email",
+          card_email_subtitle: "Send an email.",
+          qr_placeholder: "Choose a QR code type on the left",
+          download_button: "Download QR",
+          benefits_title: "Benefits of Modern QR",
+          benefits_subtitle: "Create custom static QR codes quickly and for free. Ideal for business cards, menus, events, and much more, without needing to be an expert.",
+          benefit_1: "Unlimited static QR codes",
+          benefit_2: "Logo customization",
+          benefit_3: "No registration required",
+          benefit_4: "Completely free and open source",
+          footer_developed_by: "Developed by",
+          footer_privacy: "Privacy Policy",
+          footer_terms: "Terms and Conditions",
+          footer_donate: "Donate",
+          modal_config_web: "Configure Website QR",
+          modal_url_label: "Website URL",
+          modal_config_insta: "Configure Instagram QR",
+          modal_user_label: "Username (without @)",
+          modal_config_wa: "Configure WhatsApp QR",
+          modal_msg_label: "Message (optional)",
+          modal_config_wifi: "Configure Wi-Fi QR",
+          modal_ssid_label: "Network Name (SSID)",
+          modal_pass_label: "Password",
+          modal_encrypt_label: "Encryption Type",
+          modal_config_call: "Configure Call QR",
+          modal_country_code_label: "Country Code",
+          modal_phone_num_label: "Phone Number",
+          modal_wa_phone_num_label: "Phone Number",
+          modal_config_email: "Configure Email QR",
+          modal_email_addr_label: "Email address",
+          modal_subject_label: "Subject",
+          modal_body_label: "Message body",
+          modal_close_button: "Close",
+          modal_generate_button: "Generate QR",
+          frame_logo_title: "Logo (Optional)",
+          privacy_title: "Privacy Policy",
+          privacy_text: "This application is open source and does not store any data entered by the user. All QR code generation is done on the client side (in your browser).",
+          terms_title: "Terms and Conditions",
+          terms_text: "Use of this service is free. You are responsible for the content you generate. Use for illegal purposes is not permitted..",
+        }
+      };
+
+      // Países para códigos telefónicos
+      const countries = [
+        { name: "Argentina", code: "+54" }, 
+        { name: "Australia", code: "+61" }, 
+        { name: "Austria", code: "+43" }, 
+        { name: "Canadá", code: "+1" }, 
+        { name: "Colombia", code: "+57" }, 
+        { name: "México", code: "+52" }, 
+        { name: "España", code: "+34" }, 
+        { name: "Estados Unidos", code: "+1" }, 
+        { name: "Reino Unido", code: "+44" },
+      ];
+
+      // Inicialización
+      function init() {
+        injectModals();
+        populateCountryCodes('call-country-code');
+        populateCountryCodes('whatsapp-country-code');
+        setupModalEvents();
+        setupCustomizationEvents();
+        setLanguage('es');
+        checkSystemDarkMode();
+        setupEventListeners();
+      }
+
+      // Configurar event listeners adicionales
+      function setupEventListeners() {
+        // Toggle personalización
+        document.getElementById('customization-toggle').addEventListener('click', toggleCustomizationPanel);
+        
+        // Selectores de color
+        document.querySelectorAll('.color-option').forEach(option => {
+          option.addEventListener('click', (e) => {
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+            e.target.classList.add('active');
+            currentColor = e.target.dataset.color;
+            if (currentQRContent) renderFinalQR();
+          });
+        });
+        
+        // Selectores de estilo de puntos
+        document.querySelectorAll('input[name="dots-style"]').forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            currentDotStyle = e.target.value;
+            if (currentQRContent) renderFinalQR();
+          });
+        });
+        
+        // Selectores de plantilla
+        document.querySelectorAll('.template-option').forEach(template => {
+          template.addEventListener('click', (e) => {
+            document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
+            e.target.closest('.template-option').classList.add('selected');
+            currentTemplate = e.target.closest('.template-option').dataset.template;
+            if (currentQRContent) renderFinalQR();
+          });
+        });
+        
+        // Botones de compartir y copiar
+        document.getElementById('share-btn').addEventListener('click', shareQR);
+        document.getElementById('copy-btn').addEventListener('click', copyQR);
+        
+        // Botón de descarga
+        document.getElementById('download-png').addEventListener('click', downloadQR);
+        
+        // Toggle dark mode
+        document.getElementById('toggle-dark').addEventListener('click', () => {
+          document.documentElement.classList.toggle('dark');
+          if (currentQRContent) renderFinalQR(); // Re-render para ajustar colores de fondo
+        });
+        
+        // Toggle idioma
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+          setLanguage(currentLanguage === 'es' ? 'en' : 'es');
+        });
+      }
+
+      // Alternar panel de personalización
+      function toggleCustomizationPanel() {
+        const panel = document.getElementById('customization-panel');
+        const arrow = document.getElementById('customization-arrow');
+        
+        panel.classList.toggle('collapsed');
+        panel.classList.toggle('expanded');
+        arrow.classList.toggle('fa-chevron-down');
+        arrow.classList.toggle('fa-chevron-up');
+      }
+
+      // Verificar preferencia de modo oscuro del sistema
+      function checkSystemDarkMode() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        }
+      }
+
+      // Compartir código QR
+      async function shareQR() {
+        if (!qrCodeInstance) {
+          showAlert(currentLanguage === 'es' ? 'Primero genere un código QR.' : 'First, generate a QR code.');
+          return;
+        }
+        
+        try {
+          if (navigator.share) {
+            const canvas = await html2canvas(finalQrPreview);
+            canvas.toBlob(async (blob) => {
+              const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+              await navigator.share({
+                title: 'Mi código QR',
+                text: 'Mira este código QR que creé',
+                files: [file]
+              });
+            });
+          } else {
+            showAlert(currentLanguage === 'es' ? 
+              'La función de compartir no está disponible en tu navegador.' : 
+              'Sharing is not available in your browser.');
+          }
+        } catch (error) {
+          console.error('Error sharing:', error);
+        }
+      }
+
+      // Copiar código QR al portapapeles
+      async function copyQR() {
+        if (!qrCodeInstance) {
+          showAlert(currentLanguage === 'es' ? 'Primero genere un código QR.' : 'First, generate a QR code.');
+          return;
+        }
+        
+        try {
+          const canvas = await html2canvas(finalQrPreview);
+          canvas.toBlob(async (blob) => {
+            try {
+              await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': blob })
+              ]);
+              showAlert(currentLanguage === 'es' ? 
+                '¡Código QR copiado al portapapeles!' : 
+                'QR code copied to clipboard!', 'success');
+            } catch (err) {
+              console.error('Error copying to clipboard:', err);
+              showAlert(currentLanguage === 'es' ? 
+                'No se pudo copiar el código QR.' : 
+                'Could not copy QR code.', 'error');
+            }
+          });
+        } catch (error) {
+          console.error('Error copying:', error);
+          showAlert(currentLanguage === 'es' ? 
+            'No se pudo copiar el código QR.' : 
+            'Could not copy QR code.', 'error');
+        }
+      }
+
+      // Descargar código QR
+      function downloadQR() {
+        if (!qrCodeInstance) {
+          showAlert(currentLanguage === 'es' ? 'Primero genere un código QR.' : 'First, generate a QR code.');
+          return;
+        }
+        
+        const highQualityQr = new QRCodeStyling({
+          width: 1000,
+          height: 1000,
+          data: currentQRContent,
+          image: selectedLogo,
+          dotsOptions: {
+            color: currentColor,
+            type: currentDotStyle
+          },
+          backgroundOptions: {
+            color: "transparent"
+          },
+          imageOptions: {
+            hideBackgroundDots: true,
+            imageSize: 0.35,
+            margin: 10
+          },
+          cornersSquareOptions: {
+            type: "extra-rounded"
+          },
+          cornersDotOptions: {
+            type: "dot"
+          }
+        });
+        
+        highQualityQr.download({ name: "qr-moderno", extension: "png" });
+      }
+
+      // Mostrar alerta/notificación
+      function showAlert(message, type = 'info') {
+        const alert = document.createElement('div');
+        alert.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-opacity duration-300 ${
+          type === 'error' ? 'bg-red-500 text-white' : 
+          type === 'success' ? 'bg-green-500 text-white' : 
+          'bg-blue-500 text-white'
+        }`;
+        alert.textContent = message;
+        
+        document.body.appendChild(alert);
+        
+        setTimeout(() => {
+          alert.remove();
+        }, 3000);
+      }
+
+      // Renderizar código QR final con las personalizaciones
+      function renderFinalQR() {
+        if (!currentQRContent) return;
+        
+        qrPlaceholder.style.display = 'none';
+        finalQrPreview.innerHTML = '';
+        
+        const qrOptions = {
+          width: 250,
+          height: 250,
+          data: currentQRContent,
+          image: selectedLogo,
+          dotsOptions: {
+            color: currentColor,
+            type: currentDotStyle
+          },
+          backgroundOptions: {
+            color: finalQrPreview.closest('.phone-screen').classList.contains('dark') ? 
+              '#111827' : '#ffffff'
+          },
+          imageOptions: {
+            hideBackgroundDots: true,
+            imageSize: 0.35,
+            margin: 10
+          },
+          cornersSquareOptions: {
+            type: "extra-rounded"
+          },
+          cornersDotOptions: {
+            type: "dot"
+          }
+        };
+        
+        if (currentTemplate === 'frame') {
+          qrOptions.dotsOptions.color = '#4f46e5';
+          qrOptions.backgroundOptions.color = '#f3f4f6';
+          if (finalQrPreview.closest('.phone-screen').classList.contains('dark')) {
+            qrOptions.backgroundOptions.color = '#374151';
+          }
+        }
+        
+        qrCodeInstance = new QRCodeStyling(qrOptions);
+        qrCodeInstance.append(finalQrPreview);
+        
+        if (currentTemplate === 'frame') {
+          const textElement = document.createElement('div');
+          textElement.className = 'absolute bottom-4 left-0 right-0 text-center text-xs font-medium';
+          textElement.textContent = 'Escanea este código';
+          finalQrPreview.appendChild(textElement);
+        }
+      }
+
+      // Establecer idioma
+      const setLanguage = (lang) => {
+        currentLanguage = lang;
+        document.documentElement.lang = lang;
+        document.title = translations[lang]['page_title'] || document.title;
+        document.querySelectorAll('[data-translate]').forEach(el => {
+          const key = el.getAttribute('data-translate');
+          if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+          }
+        });
+        document.getElementById('lang-toggle').textContent = lang === 'es' ? 'EN' : 'ES';
+      };
+
+      // Inyectar modales
+      const injectModals = () => {
+        const commonModalSections = (type) => `
+          <div class="mt-4 border-t pt-4">
+            <label class="block text-sm font-medium mb-2" data-translate="frame_logo_title"></label>
+            <input type="file" class="logo-input text-sm w-full" accept="image/*" data-modal-type="${type}">
+            <img class="logo-preview hidden w-16 h-16 mt-2 rounded-md object-contain" id="logo-preview-${type}">
+          </div>
+          <div class="mt-6 flex justify-end gap-2">
+            <button class="modal-close bg-gray-300 dark:bg-gray-500 px-4 py-2 rounded-lg" data-translate="modal_close_button"></button>
+            <button data-qr-type="${type}" class="generate-qr-button bg-indigo-600 text-white px-4 py-2 rounded-lg" data-translate="modal_generate_button"></button>
+          </div>`;
+
+        modalContainer.innerHTML = `
+          <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center transition-opacity duration-300 z-30 p-4 hidden">
+            <div id="modal-web" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_web"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_url_label"></label>
+              <input id="web-url" type="url" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="https://ejemplo.com">
+              ${commonModalSections('web')}
+            </div>
+            
+            <div id="modal-instagram" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_insta"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_user_label"></label>
+              <input id="instagram-user" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="usuario.de.instagram">
+              ${commonModalSections('instagram')}
+            </div>
+            
+            <div id="modal-whatsapp" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_wa"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_country_code_label"></label>
+              <select id="whatsapp-country-code" class="w-full border rounded-lg p-2 mb-4 dark:bg-gray-700 dark:border-gray-600"></select>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_wa_phone_num_label"></label>
+              <input id="whatsapp-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="3001234567">
+              <label class="block mt-4 mb-2 text-sm font-medium" data-translate="modal_msg_label"></label>
+              <textarea id="whatsapp-message" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" rows="2" placeholder="¡Hola!"></textarea>
+              ${commonModalSections('whatsapp')}
+            </div>
+
+            <div id="modal-wifi" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_wifi"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_ssid_label"></label>
+              <input id="wifi-ssid" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="NombreDeMiRed">
+              <label class="block mt-4 mb-2 text-sm font-medium" data-translate="modal_pass_label"></label>
+              <input id="wifi-password" type="password" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600">
+              <label class="block mt-4 mb-2 text-sm font-medium" data-translate="modal_encrypt_label"></label>
+              <select id="wifi-encryption" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Sin contraseña</option>
+              </select>
+              ${commonModalSections('wifi')}
+            </div>
+            
+            <div id="modal-call" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_call"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_country_code_label"></label>
+              <select id="call-country-code" class="w-full border rounded-lg p-2 mb-4 dark:bg-gray-700 dark:border-gray-600"></select>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_phone_num_label"></label>
+              <input id="call-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="1234567890">
+              ${commonModalSections('call')}
+            </div>
+
+            <div id="modal-email" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-md hidden">
+              <h3 class="text-lg font-bold mb-4" data-translate="modal_config_email"></h3>
+              <label class="block mb-2 text-sm font-medium" data-translate="modal_email_addr_label"></label>
+              <input id="email-addr" type="email" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="correo@ejemplo.com">
+              <label class="block mt-4 mb-2 text-sm font-medium" data-translate="modal_subject_label"></label>
+              <input id="email-subject" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Asunto del correo">
+              <label class="block mt-4 mb-2 text-sm font-medium" data-translate="modal_body_label"></label>
+              <textarea id="email-body" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" rows="2"></textarea>
+              ${commonModalSections('email')}
+            </div>
+            
+            <div id="modal-privacy" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-lg hidden">
+              <h3 class="text-lg font-bold mb-2" data-translate="privacy_title"></h3>
+              <p class="text-sm" data-translate="privacy_text"></p>
+              <button class="modal-close mt-4 bg-indigo-600 text-white px-3 py-1 rounded-lg" data-translate="modal_close_button"></button>
+            </div>
+            
+            <div id="modal-terms" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-lg hidden">
+              <h3 class="text-lg font-bold mb-2" data-translate="terms_title"></h3>
+              <p class="text-sm" data-translate="terms_text"></p>
+              <button class="modal-close mt-4 bg-indigo-600 text-white px-3 py-1 rounded-lg" data-translate="modal_close_button"></button>
+            </div>
+
+          </div>`;
+      };
+
+      // Llenar códigos de país
+      const populateCountryCodes = (selectId) => {
+        const select = document.getElementById(selectId);
+        if (select) {
+          select.innerHTML = '';
+          const defaultOption = document.createElement('option');
+          defaultOption.value = "";
+          defaultOption.textContent = currentLanguage === 'es' ? "-- Seleccionar --" : "-- Select --";
+          select.appendChild(defaultOption);
+          countries.sort((a, b) => a.name.localeCompare(b.name)).forEach(country => {
+            const option = document.createElement('option');
+            option.value = country.code;
+            option.textContent = `${country.name} (${country.code})`;
+            select.appendChild(option);
+          });
+        }
+      };
+
+      // Configurar eventos de los modales
+      const setupModalEvents = () => {
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        const openModal = (modalId) => {
+          modalContainer.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.classList.remove('hidden');
+            if (modalId === 'modal-call' || modalId === 'modal-whatsapp') {
+              const selectId = modalId === 'modal-call' ? 'call-country-code' : 'whatsapp-country-code';
+              populateCountryCodes(selectId);
+            }
+          }
+          modalOverlay.classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+          modalOverlay.classList.add('hidden');
+          modalOverlay.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
+        };
+        
+        document.getElementById('qr-type-selector').addEventListener('click', (e) => {
+          const card = e.target.closest('.qr-type-card');
+          if (card && card.dataset.modalId) {
+            selectedLogo = null; 
+            document.querySelectorAll('.logo-input').forEach(input => input.value = '');
+            document.querySelectorAll('.logo-preview').forEach(preview => preview.classList.add('hidden'));
+            openModal(card.dataset.modalId);
+          }
+        });
+        
+        document.getElementById('privacy-link').addEventListener('click', (e) => { e.preventDefault(); openModal('modal-privacy'); });
+        document.getElementById('terms-link').addEventListener('click', (e) => { e.preventDefault(); openModal('modal-terms'); });
+        
+        document.addEventListener('change', (event) => {
+          if (event.target.matches('.logo-input')) {
+            const type = event.target.dataset.modalType;
+            const preview = document.getElementById(`logo-preview-${type}`);
+            if (event.target.files && event.target.files[0]) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                selectedLogo = e.target.result;
+                if(preview) {
+                  preview.src = selectedLogo;
+                  preview.classList.remove('hidden');
+                }
+              };
+              reader.readAsDataURL(event.target.files[0]);
+            } else {
+              selectedLogo = null;
+              if(preview) { preview.classList.add('hidden'); }
+            }
+          }
+        });
+
+        document.getElementById('modal-container').addEventListener('change', (event) => {
+          const targetId = event.target.id;
+          if (targetId === 'call-country-code' || targetId === 'whatsapp-country-code') {
+            const phoneInputId = targetId === 'call-country-code' ? 'call-phone' : 'whatsapp-phone';
+            const phoneInput = document.getElementById(phoneInputId);
+            if (phoneInput) {
+              const selectedCode = event.target.value;
+              const selectedCountry = countries.find(country => country.code === selectedCode);
+              phoneInput.placeholder = selectedCountry ? selectedCountry.code.replace('+', '') + '...' : '...';
+            }
+          }
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+          if (e.target === modalOverlay || e.target.classList.contains('modal-close')) {
+            closeModal();
+          }
+        });
+
+        document.addEventListener('click', (e) => {
+          if (e.target.classList.contains('generate-qr-button')) {
+            const type = e.target.dataset.qrType;
+            let content = '';
+            switch(type) {
+              case 'web': content = document.getElementById('web-url').value; break;
+              case 'instagram': const user = document.getElementById('instagram-user').value; if (user) content = `https://www.instagram.com/${user.replace('@', '')}`; break;
+              case 'whatsapp':
+                const waCountryCode = document.getElementById('whatsapp-country-code').value; const waPhone = document.getElementById('whatsapp-phone').value;
+                if (waCountryCode && waPhone) { const fullNumber = waCountryCode.replace('+', '') + waPhone.replace(/\s/g, ''); const msg = document.getElementById('whatsapp-message').value; content = `https://wa.me/${fullNumber}?text=${encodeURIComponent(msg)}`; } break;
+              case 'wifi':
+                const ssid = document.getElementById('wifi-ssid').value; if (ssid) { const pass = document.getElementById('wifi-password').value; const enc = document.getElementById('wifi-encryption').value; content = `WIFI:T:${enc};S:${ssid};P:${pass};;`; } break;
+              case 'call':
+                const callCountryCode = document.getElementById('call-country-code').value; const callPhone = document.getElementById('call-phone').value;
+                if (callCountryCode && callPhone) { content = `tel:${callCountryCode}${callPhone.replace(/\s/g, '')}`; } else if (callPhone) { content = `tel:${callPhone.replace(/\s/g, '')}`; } break;
+              case 'email':
+                const addr = document.getElementById('email-addr').value; if (addr) { const sub = document.getElementById('email-subject').value; const body = document.getElementById('email-body').value; content = `mailto:${addr}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`; } break;
+            }
+            if (content) { currentQRContent = content; renderFinalQR(); closeModal(); } 
+            else { showAlert(currentLanguage === 'es' ? 'Por favor, ingrese el contenido principal para el QR.' : 'Please enter the main content for the QR.'); }
+          }
+        });
+      };
+
+      // Configurar eventos de personalización
+      function setupCustomizationEvents() {
+        document.querySelector('.color-option').classList.add('active');
+      }
+
+      // Inicializar la aplicación
+      init();
+    });
+  </script>
 </body>
 </html>
