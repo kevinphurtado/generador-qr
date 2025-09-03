@@ -1,6 +1,6 @@
 #  Generador de Códigos QR
 
-![Captura de pantalla del Generador QR Moderno](https://i.imgur.com/7qgYMvG.png)
+![Captura de pantalla del Generador QR Moderno](https://i.imgur.com/9FEnrF1.png)
 
 **Generador QR** es una herramienta web de código abierto y totalmente gratuita que te permite crear códigos QR estáticos, personalizados y de alta calidad directamente en tu navegador. Ideal para tarjetas de presentación, menús de restaurantes, eventos, redes Wi-Fi y mucho más.
 
