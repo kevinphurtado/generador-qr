@@ -66,6 +66,137 @@
       transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
     .download-hd-button:hover { opacity: 0.9; box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+    
+    /* Estilos adicionales para las nuevas funcionalidades */
+    
+    /* Mejoras para el selector de colores */
+    .color-picker-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    
+    .color-picker {
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    /* Estilos para el historial */
+    .history-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background-color: #f9fafb;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .history-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .history-item {
+      background-color: #374151;
+    }
+    
+    .history-qr {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    /* Indicador de calidad QR */
+    .quality-indicator {
+      display: flex;
+      align-items: center;
+      margin-top: 12px;
+    }
+    
+    .quality-bar {
+      height: 4px;
+      border-radius: 2px;
+      flex-grow: 1;
+      margin: 0 8px;
+      background-color: #e5e7eb;
+      overflow: hidden;
+    }
+    
+    .dark .quality-bar {
+      background-color: #4b5563;
+    }
+    
+    .quality-segment {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    /* Estilos para los nuevos tipos de QR */
+    .new-feature-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: linear-gradient(to right, #ec4899, #8b5cf6);
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+    
+    /* Botón para borrar historial */
+    .clear-history-btn {
+      background: linear-gradient(to right, #ef4444, #dc2626);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      margin-top: 12px;
+      transition: all 0.3s;
+    }
+    
+    .clear-history-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    /* Mejoras responsive */
+    @media (max-width: 768px) {
+      .qr-type-card {
+        height: 9rem;
+        padding: 1rem 0.5rem;
+      }
+      
+      .history-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .history-qr {
+        margin-right: 0;
+        margin-bottom: 8px;
+      }
+    }
   </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
@@ -103,6 +234,27 @@
             <div data-modal-id="modal-sms" class="qr-type-card"><div class="qr-type-icon bg-cyan-100 text-cyan-600"><i class="fas fa-comment-sms text-xl"></i></div><span class="font-semibold" data-translate="card_sms_title">SMS</span><p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_sms_subtitle">Envía mensajes de texto</p></div>
             <div data-modal-id="modal-vcard" class="qr-type-card"><div class="qr-type-icon bg-indigo-100 text-indigo-600"><i class="fas fa-address-card text-xl"></i></div><span class="font-semibold" data-translate="card_vcard_title">Contacto</span><p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_vcard_subtitle">Comparte tu vCard</p></div>
             <div data-modal-id="modal-location" class="qr-type-card"><div class="qr-type-icon bg-rose-100 text-rose-600"><i class="fas fa-map-marker-alt text-xl"></i></div><span class="font-semibold" data-translate="card_location_title">Ubicación</span><p class="text-xs text-gray-500 dark:text-gray-400" data-translate="card_location_subtitle">Comparte una ubicación</p></div>
+            
+            <div class="qr-type-card relative opacity-50 cursor-not-allowed">
+              <span class="new-feature-badge !bg-gray-500">Próximamente</span>
+              <div class="qr-type-icon bg-blue-100 text-blue-600"><i class="fab fa-paypal text-xl"></i></div>
+              <span class="font-semibold">PayPal</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Recibir pagos</p>
+            </div>
+            
+            <div data-modal-id="modal-spotify" class="qr-type-card relative">
+              <span class="new-feature-badge">Nuevo</span>
+              <div class="qr-type-icon bg-green-100 text-green-600"><i class="fab fa-spotify text-xl"></i></div>
+              <span class="font-semibold">Spotify</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Compartir música</p>
+            </div>
+            
+            <div data-modal-id="modal-telegram" class="qr-type-card relative">
+              <span class="new-feature-badge">Nuevo</span>
+              <div class="qr-type-icon bg-blue-100 text-blue-600"><i class="fab fa-telegram text-xl"></i></div>
+              <span class="font-semibold">Telegram</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Unirse a canal/grupo</p>
+            </div>
           </div>
         </div>
 
@@ -115,20 +267,102 @@
             <div class="pt-4 space-y-4">
               <div>
                 <label class="block text-sm font-medium mb-2" data-translate="customization_color_label">Color del QR</label>
-                <div class="flex gap-2"><div class="color-option bg-black active" data-color="#000000"></div><div class="color-option bg-primary-600" data-color="#4f46e5"></div><div class="color-option bg-red-600" data-color="#dc2626"></div><div class="color-option bg-green-600" data-color="#16a34a"></div><div class="color-option bg-blue-600" data-color="#2563eb"></div><div class="color-option bg-purple-600" data-color="#9333ea"></div></div>
+                <div class="flex gap-2 flex-wrap">
+                  <div class="color-option bg-black active" data-color="#000000"></div>
+                  <div class="color-option bg-primary-600" data-color="#4f46e5"></div>
+                  <div class="color-option bg-red-600" data-color="#dc2626"></div>
+                  <div class="color-option bg-green-600" data-color="#16a34a"></div>
+                  <div class="color-option bg-blue-600" data-color="#2563eb"></div>
+                  <div class="color-option bg-purple-600" data-color="#9333ea"></div>
+                  <div class="color-picker-container">
+                    <input type="color" id="custom-color-picker" class="color-picker" value="#000000">
+                    <span class="text-xs">Personalizado</span>
+                  </div>
+                </div>
               </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2">Previsualizar color de fondo</label>
+                <div class="flex gap-2 flex-wrap">
+                  <div class="color-option bg-white border border-gray-300 active" data-bg-color="#ffffff"></div>
+                  <div class="color-option bg-gray-100" data-bg-color="#f3f4f6"></div>
+                  <div class="color-option bg-primary-100" data-bg-color="#e0f2fe"></div>
+                  <div class="color-option bg-red-100" data-bg-color="#fee2e2"></div>
+                  <div class="color-option bg-green-100" data-bg-color="#dcfce7"></div>
+                  <div class="color-option bg-blue-100" data-bg-color="#dbeafe"></div>
+                  <div class="color-picker-container">
+                    <input type="color" id="custom-bg-color-picker" class="color-picker" value="#ffffff">
+                    <span class="text-xs">Personalizado</span>
+                  </div>
+                </div>
+              </div>
+              
               <div>
                 <label class="block text-sm font-medium mb-2" data-translate="customization_dots_label">Forma de los puntos</label>
-                <div class="flex gap-4"><div class="flex items-center gap-2"><input type="radio" id="dots-rounded" name="dots-style" value="rounded" checked class="rounded-full"><label for="dots-rounded" class="text-sm" data-translate="dots_rounded">Redondeados</label></div><div class="flex items-center gap-2"><input type="radio" id="dots-square" name="dots-style" value="square" class="rounded-full"><label for="dots-square" class="text-sm" data-translate="dots_square">Cuadrados</label></div><div class="flex items-center gap-2"><input type="radio" id="dots-dot" name="dots-style" value="dot" class="rounded-full"><label for="dots-dot" class="text-sm" data-translate="dots_dot">Puntos</label></div></div>
+                <div class="flex gap-4 flex-wrap"><div class="flex items-center gap-2"><input type="radio" id="dots-rounded" name="dots-style" value="rounded" checked class="rounded-full"><label for="dots-rounded" class="text-sm" data-translate="dots_rounded">Redondeados</label></div><div class="flex items-center gap-2"><input type="radio" id="dots-square" name="dots-style" value="square" class="rounded-full"><label for="dots-square" class="text-sm" data-translate="dots_square">Cuadrados</label></div><div class="flex items-center gap-2"><input type="radio" id="dots-dot" name="dots-style" value="dot" class="rounded-full"><label for="dots-dot" class="text-sm" data-translate="dots_dot">Puntos</label></div></div>
               </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2">Forma de los ojos</label>
+                <div class="flex gap-4 flex-wrap">
+                  <div class="flex items-center gap-2">
+                    <input type="radio" id="eyes-rounded" name="eyes-style" value="rounded" checked class="rounded-full">
+                    <label for="eyes-rounded" class="text-sm">Redondeados</label>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="radio" id="eyes-square" name="eyes-style" value="square" class="rounded-full">
+                    <label for="eyes-square" class="text-sm">Cuadrados</label>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="radio" id="eyes-circle" name="eyes-style" value="circle" class="rounded-full">
+                    <label for="eyes-circle" class="text-sm">Circulares</label>
+                  </div>
+                </div>
+              </div>
+              
               <div>
                 <label class="block text-sm font-medium mb-2" data-translate="templates_title">Plantillas</label>
                 <div class="grid grid-cols-2 gap-3">
                   <div class="template-option selected p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="default"><div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center"><div class="w-10 h-10 border-2 border-gray-400 rounded"></div></div><p class="text-xs text-center mt-1">Default</p></div>
                   <div class="template-option p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="frame"><div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center relative"><div class="w-10 h-10 border-2 border-gray-400 rounded"></div><div class="absolute bottom-1 left-0 right-0 h-3 bg-gray-300 dark:bg-gray-600 mx-2 rounded-sm"></div></div><p class="text-xs text-center mt-1" data-translate="template_frame">Con marco</p></div>
+                  <div class="template-option p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="modern">
+                    <div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center relative">
+                      <div class="w-10 h-10 border-2 border-primary-400 rounded-full"></div>
+                    </div>
+                    <p class="text-xs text-center mt-1">Moderno</p>
+                  </div>
+                  <div class="template-option p-2 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" data-template="elegant">
+                    <div class="bg-gray-200 dark:bg-gray-700 h-16 rounded flex items-center justify-center relative">
+                      <div class="w-10 h-10 border-2 border-gray-400" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"></div>
+                    </div>
+                    <p class="text-xs text-center mt-1">Elegante</p>
+                  </div>
                 </div>
               </div>
+              
+              <div class="quality-indicator">
+                <span class="text-sm">Calidad:</span>
+                <div class="quality-bar">
+                  <div class="quality-segment bg-green-500" style="width: 90%"></div>
+                </div>
+                <span class="text-xs text-green-600">Excelente</span>
+              </div>
             </div>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mt-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+              <i class="fas fa-history text-primary-600"></i>
+              <span>Historial reciente</span>
+            </h3>
+            <button id="clear-history" class="clear-history-btn flex items-center gap-2">
+              <i class="fas fa-trash"></i> Borrar
+            </button>
+          </div>
+          <div id="qr-history">
+            <p class="text-sm text-gray-500 text-center py-4">Tus códigos QR aparecerán aquí</p>
           </div>
         </div>
       </div>
@@ -144,9 +378,22 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full mt-6">
-                <button id="download-png" class="download-hd-button w-full flex items-center justify-center gap-2">
-                    <i class="fas fa-download"></i><span data-translate="download_button">Descargar HD</span>
+            
+            <div class="grid grid-cols-2 gap-3 mt-6">
+              <button id="download-png" class="download-hd-button flex items-center justify-center gap-2">
+                <i class="fas fa-download"></i><span>PNG</span>
+              </button>
+              <button id="download-svg" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                <i class="fas fa-download"></i><span>SVG</span>
+              </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <button id="copy-image-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                    <i class="fas fa-copy"></i><span>Copiar Imagen</span>
+                </button>
+                <button id="share-image-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                    <i class="fas fa-share-alt"></i><span>Compartir</span>
                 </button>
             </div>
         </div>
@@ -168,7 +415,7 @@
   
   <footer class="bg-white dark:bg-gray-800 p-6 text-gray-600 dark:text-gray-300">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-sm">&copy; 2025 <span data-translate="footer_developed_by">Desarrollado por</span> <a href="https://chococreativo.com.co/proyectos" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 font-medium">Chocó Creativo</a> 🖤</p>
+      <p class="text-sm">© 2025 <span data-translate="footer_developed_by">Desarrollado por</span> <a href="https://chococreativo.com.co/proyectos" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 font-medium">Chocó Creativo</a> 🖤</p>
       <div class="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="#" id="privacy-link" class="text-sm hover:text-primary-600 transition-colors" data-translate="footer_privacy">Política de Privacidad</a>
         <a href="#" id="terms-link" class="text-sm hover:text-primary-600 transition-colors" data-translate="footer_terms">Términos y Condiciones</a>
@@ -182,219 +429,9 @@
 
   <div id="modal-container"></div>
   
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      let currentQRContent = ''; let selectedLogo = null; let currentLanguage = 'es';
-      let qrCodeInstance = null; let currentColor = '#000000';
-      let currentDotStyle = 'rounded'; let currentTemplate = 'default';
-
-      const qrPlaceholder = document.getElementById('qr-placeholder');
-      const finalQrPreview = document.getElementById('final-qr-preview');
-
-      const translations = {
-        es: {
-          header_title: "Generador QR", generator_title: "Tipos de QR", customization_title: "Personalización",
-          preview_title: "Vista Previa", qr_placeholder_title: "Selecciona un tipo de QR para comenzar",
-          customization_color_label: "Color del código QR", customization_dots_label: "Forma de los puntos",
-          dots_rounded: "Redondeados", dots_square: "Cuadrados", dots_dot: "Puntos",
-          templates_title: "Plantillas", template_frame: "Con marco",
-          card_web_title: "Sitio Web", card_web_subtitle: "Enlaza a cualquier URL", card_insta_title: "Instagram", card_insta_subtitle: "Comparte tu perfil",
-          card_wa_title: "WhatsApp", card_wa_subtitle: "Recibe mensajes directos", card_wifi_title: "Wi-Fi", card_wifi_subtitle: "Conecta automáticamente",
-          card_call_title: "Teléfono", card_call_subtitle: "Llama con un toque", card_email_title: "Email", card_email_subtitle: "Envía correos fácilmente",
-          card_sms_title: "SMS", card_sms_subtitle: "Envía mensajes de texto", card_vcard_title: "Contacto", card_vcard_subtitle: "Comparte tu vCard",
-          card_location_title: "Ubicación", card_location_subtitle: "Comparte una ubicación",
-          download_button: "Descargar HD",
-          benefits_title: "Beneficios del Generador QR", benefits_subtitle: "Crea códigos QR estáticos y personalizados de forma rápida y gratuita. Ideal para tarjetas de presentación, menús, eventos y más.",
-          benefit_1: "Códigos QR ilimitados", benefit_2: "Personalización de logos", benefit_3: "No requiere registro", benefit_4: "Totalmente gratuito",
-          footer_developed_by: "Desarrollado por", footer_privacy: "Política de Privacidad", footer_terms: "Términos y Condiciones", footer_donate: "Donar",
-          modal_config_web: "Configurar QR de Sitio Web", modal_url_label: "URL del sitio web", modal_config_insta: "Configurar QR de Instagram", modal_user_label: "Nombre de usuario (sin @)",
-          modal_config_wa: "Configurar QR de WhatsApp", modal_msg_label: "Mensaje (opcional)", modal_config_wifi: "Configurar QR de Wi-Fi", modal_ssid_label: "Nombre de la Red (SSID)", modal_pass_label: "Contraseña", modal_encrypt_label: "Tipo de Cifrado",
-          modal_config_call: "Configurar QR de Llamada", modal_phone_num_label: "Número de Teléfono", modal_config_email: "Configurar QR de Email", modal_email_addr_label: "Dirección de correo", modal_subject_label: "Asunto", modal_body_label: "Cuerpo del mensaje",
-          modal_config_sms: "Configurar QR para SMS", modal_sms_body_label: "Mensaje", modal_config_vcard: "Configurar QR de Contacto (vCard)", modal_vcard_name_label: "Nombre Completo", modal_vcard_org_label: "Organización", modal_vcard_email_label: "Email", modal_vcard_web_label: "Sitio Web",
-          modal_config_location: "Configurar QR de Ubicación", modal_loc_lat_label: "Latitud", modal_loc_lon_label: "Longitud",
-          modal_close_button: "Cerrar", modal_generate_button: "Generar QR", frame_logo_title: "Logo (Opcional)",
-          privacy_title: "Política de Privacidad", privacy_text: "Esta aplicación es de código abierto y no almacena ningún dato ingresado por el usuario. Toda la generación de códigos QR se realiza en el lado del cliente (en su navegador).",
-          terms_title: "Términos y Condiciones", terms_text: "El uso de este servicio es gratuito. Usted es responsable del contenido que genera. No se permite el uso para fines ilícitos.",
-        },
-        en: {
-          header_title: "QR Generator", generator_title: "QR Types", customization_title: "Customization",
-          preview_title: "Preview", qr_placeholder_title: "Select a QR type to begin",
-          customization_color_label: "QR code color", customization_dots_label: "Dot shape",
-          dots_rounded: "Rounded", dots_square: "Square", dots_dot: "Dots",
-          templates_title: "Templates", template_frame: "With frame",
-          card_web_title: "Website", card_web_subtitle: "Link to any URL", card_insta_title: "Instagram", card_insta_subtitle: "Share your profile",
-          card_wa_title: "WhatsApp", card_wa_subtitle: "Receive direct messages", card_wifi_title: "Wi-Fi", card_wifi_subtitle: "Connect automatically",
-          card_call_title: "Phone", card_call_subtitle: "Call with one tap", card_email_title: "Email", card_email_subtitle: "Send emails easily",
-          card_sms_title: "SMS", card_sms_subtitle: "Send a text message", card_vcard_title: "Contact", card_vcard_subtitle: "Share your vCard",
-          card_location_title: "Location", card_location_subtitle: "Share a map location",
-          download_button: "Download HD",
-          benefits_title: "Benefits of the QR Generator", benefits_subtitle: "Create static and personalized QR codes quickly and for free. Ideal for business cards, menus, events, and more.",
-          benefit_1: "Unlimited QR codes", benefit_2: "Logo customization", benefit_3: "No registration required", benefit_4: "Completely free",
-          footer_developed_by: "Developed by", footer_privacy: "Privacy Policy", footer_terms: "Terms and Conditions", footer_donate: "Donate",
-          modal_config_web: "Configure Website QR", modal_url_label: "Website URL", modal_config_insta: "Configure Instagram QR", modal_user_label: "Username (without @)",
-          modal_config_wa: "Configure WhatsApp QR", modal_msg_label: "Message (optional)", modal_config_wifi: "Configure Wi-Fi QR", modal_ssid_label: "Network Name (SSID)", modal_pass_label: "Password", modal_encrypt_label: "Encryption Type",
-          modal_config_call: "Configure Call QR", modal_phone_num_label: "Phone Number", modal_config_email: "Configure Email QR", modal_email_addr_label: "Email address", modal_subject_label: "Subject", modal_body_label: "Message body",
-          modal_config_sms: "Configure SMS QR", modal_sms_body_label: "Message", modal_config_vcard: "Configure Contact QR (vCard)", modal_vcard_name_label: "Full Name", modal_vcard_org_label: "Organization", modal_vcard_email_label: "Email", modal_vcard_web_label: "Website",
-          modal_config_location: "Configure Location QR", modal_loc_lat_label: "Latitude", modal_loc_lon_label: "Longitude",
-          modal_close_button: "Close", modal_generate_button: "Generate QR", frame_logo_title: "Logo (Optional)",
-          privacy_title: "Privacy Policy", privacy_text: "This application is open source and does not store any data entered by the user. All QR code generation is done on the client side (in your browser).",
-          terms_title: "Terms and Conditions", terms_text: "Use of this service is free. You are responsible for the content you generate. Use for illegal purposes is not permitted..",
-        }
-      };
-
-      const setLanguage = (lang) => {
-        currentLanguage = lang; document.documentElement.lang = lang;
-        document.querySelectorAll('[data-translate]').forEach(el => {
-          const key = el.getAttribute('data-translate');
-          if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
-        });
-        document.getElementById('lang-toggle').textContent = lang === 'es' ? 'EN' : 'ES';
-      };
-
-      const renderFinalQR = () => {
-        if (!currentQRContent) return;
-        qrPlaceholder.style.display = 'none'; finalQrPreview.innerHTML = '';
-        const qrOptions = {
-          width: finalQrPreview.clientWidth, height: finalQrPreview.clientHeight, data: currentQRContent, image: selectedLogo,
-          dotsOptions: { color: currentColor, type: currentDotStyle },
-          backgroundOptions: { color: '#ffffff' },
-          imageOptions: { hideBackgroundDots: true, imageSize: 0.35, margin: 5 },
-          cornersSquareOptions: { type: "extra-rounded" }, cornersDotOptions: { type: "dot" }
-        };
-        if (currentTemplate === 'frame') {
-          qrOptions.dotsOptions.color = '#4f46e5';
-          qrOptions.backgroundOptions.color = '#f3f4f6';
-        }
-        qrCodeInstance = new QRCodeStyling(qrOptions);
-        qrCodeInstance.append(finalQrPreview);
-      };
-      
-      const downloadQR = () => {
-        if (!currentQRContent) { alert('Primero genere un código QR.'); return; }
-        const downloadInstance = new QRCodeStyling({
-          width: 1000, height: 1000, data: currentQRContent, image: selectedLogo,
-          dotsOptions: { color: currentColor, type: currentDotStyle },
-          backgroundOptions: { color: "transparent" },
-          imageOptions: { hideBackgroundDots: true, imageSize: 0.35, margin: 20 },
-          cornersSquareOptions: { type: "extra-rounded" }, cornersDotOptions: { type: "dot" }
-        });
-        downloadInstance.download({ name: "qr-choco-creativo", extension: "png" });
-      };
-
-      const setupEventListeners = () => {
-        document.getElementById('customization-toggle').addEventListener('click', () => {
-          const panel = document.getElementById('customization-panel');
-          const arrow = document.getElementById('customization-arrow');
-          panel.classList.toggle('max-h-0'); panel.classList.toggle('pt-4');
-          arrow.classList.toggle('rotate-180');
-        });
-        document.querySelectorAll('.color-option').forEach(option => option.addEventListener('click', (e) => {
-          document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
-          e.target.classList.add('active'); currentColor = e.target.dataset.color;
-          if (currentQRContent) renderFinalQR();
-        }));
-        document.querySelectorAll('input[name="dots-style"]').forEach(radio => radio.addEventListener('change', (e) => {
-          currentDotStyle = e.target.value; if (currentQRContent) renderFinalQR();
-        }));
-        document.querySelectorAll('.template-option').forEach(template => template.addEventListener('click', (e) => {
-          document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
-          const current = e.target.closest('.template-option');
-          current.classList.add('selected'); currentTemplate = current.dataset.template;
-          if (currentQRContent) renderFinalQR();
-        }));
-        document.getElementById('download-png').addEventListener('click', downloadQR);
-        document.getElementById('toggle-dark').addEventListener('click', () => {
-          document.documentElement.classList.toggle('dark');
-        });
-        document.getElementById('lang-toggle').addEventListener('click', () => setLanguage(currentLanguage === 'es' ? 'en' : 'es'));
-        document.getElementById('qr-type-selector').addEventListener('click', (e) => {
-          const card = e.target.closest('.qr-type-card');
-          if (card && card.dataset.modalId) {
-            selectedLogo = null; openModal(card.dataset.modalId);
-          }
-        });
-        document.getElementById('privacy-link').addEventListener('click', (e) => { e.preventDefault(); openModal('modal-privacy'); });
-        document.getElementById('terms-link').addEventListener('click', (e) => { e.preventDefault(); openModal('modal-terms'); });
-      };
-
-      const injectModals = () => {
-        const commonModalSections = (type) => `
-          <div class="mt-4 border-t pt-4 dark:border-gray-600">
-            <label class="block text-sm font-medium mb-2" data-translate="frame_logo_title"></label>
-            <input type="file" class="logo-input text-sm w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:text-gray-300" accept="image/*" data-modal-type="${type}">
-            <img class="logo-preview hidden w-16 h-16 mt-2 rounded-md object-contain bg-gray-100 dark:bg-gray-700" id="logo-preview-${type}">
-          </div>
-          <div class="mt-6 flex justify-end gap-2">
-            <button class="modal-close bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded-lg" data-translate="modal_close_button"></button>
-            <button data-qr-type="${type}" class="generate-qr-button bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg" data-translate="modal_generate_button"></button>
-          </div>`;
-        document.getElementById('modal-container').innerHTML = `
-        <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300 z-50 p-4 hidden">
-          <div class="modal-content-wrapper w-full max-w-md">
-            <div id="modal-web" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_web"></h3><label class="block mb-2 text-sm" data-translate="modal_url_label"></label><input id="web-url" type="url" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="https://ejemplo.com">${commonModalSections('web')}</div>
-            <div id="modal-instagram" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_insta"></h3><label class="block mb-2 text-sm" data-translate="modal_user_label"></label><input id="instagram-user" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="usuario.de.instagram">${commonModalSections('instagram')}</div>
-            <div id="modal-whatsapp" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_wa"></h3><label class="block mb-2 text-sm" data-translate="modal_phone_num_label"></label><input id="whatsapp-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="573001234567"><label class="block mt-4 mb-2 text-sm" data-translate="modal_msg_label"></label><textarea id="whatsapp-message" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" rows="2" placeholder="¡Hola!"></textarea>${commonModalSections('whatsapp')}</div>
-            <div id="modal-wifi" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_wifi"></h3><label class="block mb-2 text-sm" data-translate="modal_ssid_label"></label><input id="wifi-ssid" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="NombreDeMiRed"><label class="block mt-4 mb-2 text-sm" data-translate="modal_pass_label"></label><input id="wifi-password" type="password" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600"><label class="block mt-4 mb-2 text-sm" data-translate="modal_encrypt_label"></label><select id="wifi-encryption" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">Sin contraseña</option></select>${commonModalSections('wifi')}</div>
-            <div id="modal-call" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_call"></h3><label class="block mb-2 text-sm" data-translate="modal_phone_num_label"></label><input id="call-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="+573001234567">${commonModalSections('call')}</div>
-            <div id="modal-email" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_email"></h3><label class="block mb-2 text-sm" data-translate="modal_email_addr_label"></label><input id="email-addr" type="email" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="correo@ejemplo.com"><label class="block mt-4 mb-2 text-sm" data-translate="modal_subject_label"></label><input id="email-subject" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Asunto"><label class="block mt-4 mb-2 text-sm" data-translate="modal_body_label"></label><textarea id="email-body" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" rows="2"></textarea>${commonModalSections('email')}</div>
-            <div id="modal-sms" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_sms"></h3><label class="block mb-2 text-sm" data-translate="modal_phone_num_label"></label><input id="sms-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="+573001234567"><label class="block mt-4 mb-2 text-sm" data-translate="modal_sms_body_label"></label><textarea id="sms-body" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="Mensaje..."></textarea>${commonModalSections('sms')}</div>
-            <div id="modal-vcard" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_vcard"></h3><div class="space-y-3 text-left"><label class="block text-sm" data-translate="modal_vcard_name_label"></label><input id="vcard-name" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Juan Pérez"><label class="block text-sm" data-translate="modal_phone_num_label"></label><input id="vcard-phone" type="tel" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="+573001234567"><label class="block text-sm" data-translate="modal_vcard_email_label"></label><input id="vcard-email" type="email" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="juan.perez@email.com"><label class="block text-sm" data-translate="modal_vcard_org_label"></label><input id="vcard-org" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Empresa"><label class="block text-sm" data-translate="modal_vcard_web_label"></label><input id="vcard-web" type="url" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="https://tu-sitio.com"></div>${commonModalSections('vcard')}</div>
-            <div id="modal-location" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hidden"><h3 class="text-lg font-bold mb-4" data-translate="modal_config_location"></h3><label class="block mb-2 text-sm" data-translate="modal_loc_lat_label"></label><input id="loc-lat" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Ej: 4.60971"><label class="block mt-4 mb-2 text-sm" data-translate="modal_loc_lon_label"></label><input id="loc-lon" type="text" class="w-full border rounded-lg p-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Ej: -74.08175">${commonModalSections('location')}</div>
-            <div id="modal-privacy" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-lg hidden"><h3 class="text-lg font-bold mb-2" data-translate="privacy_title"></h3><p class="text-sm" data-translate="privacy_text"></p><button class="modal-close mt-4 bg-indigo-600 text-white px-3 py-1 rounded-lg" data-translate="modal_close_button"></button></div>
-            <div id="modal-terms" class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-lg hidden"><h3 class="text-lg font-bold mb-2" data-translate="terms_title"></h3><p class="text-sm" data-translate="terms_text"></p><button class="modal-close mt-4 bg-indigo-600 text-white px-3 py-1 rounded-lg" data-translate="modal_close_button"></button></div>
-          </div>
-        </div>`;
-      };
-      
-      const setupModalLogic = () => {
-        const modalOverlay = document.getElementById('modal-overlay');
-        const openModal = (modalId) => {
-          modalOverlay.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
-          const modal = document.getElementById(modalId);
-          if (modal) modal.classList.remove('hidden');
-          modalOverlay.classList.remove('hidden');
-        };
-        const closeModal = () => modalOverlay.classList.add('hidden');
-        window.openModal = openModal;
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay || e.target.closest('.modal-close')) { closeModal(); } });
-        document.addEventListener('change', (event) => {
-          if (event.target.matches('.logo-input')) {
-            const type = event.target.dataset.modalType; const preview = document.getElementById(`logo-preview-${type}`);
-            if (event.target.files && event.target.files[0]) {
-              const reader = new FileReader();
-              reader.onload = (e) => { selectedLogo = e.target.result; if(preview) { preview.src = selectedLogo; preview.classList.remove('hidden'); } };
-              reader.readAsDataURL(event.target.files[0]);
-            }
-          }
-        });
-        document.addEventListener('click', (e) => {
-          if (e.target.closest('.generate-qr-button')) {
-            const type = e.target.closest('.generate-qr-button').dataset.qrType;
-            let content = '';
-            switch(type) {
-              case 'web': content = document.getElementById('web-url').value; break;
-              case 'instagram': content = `https://www.instagram.com/${document.getElementById('instagram-user').value.replace('@', '')}`; break;
-              case 'whatsapp': content = `https://wa.me/${document.getElementById('whatsapp-phone').value.replace(/\s/g, '')}?text=${encodeURIComponent(document.getElementById('whatsapp-message').value)}`; break;
-              case 'wifi': content = `WIFI:T:${document.getElementById('wifi-encryption').value};S:${document.getElementById('wifi-ssid').value};P:${document.getElementById('wifi-password').value};;`; break;
-              case 'call': content = `tel:${document.getElementById('call-phone').value.replace(/\s/g, '')}`; break;
-              case 'email': content = `mailto:${document.getElementById('email-addr').value}?subject=${encodeURIComponent(document.getElementById('email-subject').value)}&body=${encodeURIComponent(document.getElementById('email-body').value)}`; break;
-              case 'sms': content = `smsto:${document.getElementById('sms-phone').value.replace(/\s/g, '')}:${document.getElementById('sms-body').value}`; break;
-              case 'vcard':
-                const vname = document.getElementById('vcard-name').value; const vphone = document.getElementById('vcard-phone').value; const vemail = document.getElementById('vcard-email').value; const vorg = document.getElementById('vcard-org').value; const vweb = document.getElementById('vcard-web').value;
-                content = `BEGIN:VCARD\nVERSION:3.0\nFN:${vname}\nORG:${vorg}\nTEL;TYPE=CELL:${vphone}\nEMAIL:${vemail}\nURL:${vweb}\nEND:VCARD`; break;
-              case 'location': content = `geo:${document.getElementById('loc-lat').value},${document.getElementById('loc-lon').value}`; break;
-            }
-            if (content && content.length > 5) { currentQRContent = content; renderFinalQR(); closeModal(); } 
-            else { alert('Por favor, completa los campos requeridos.'); }
-          }
-        });
-      };
-      
-      const checkSystemDarkMode = () => { if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.classList.add('dark'); }};
-      
-      injectModals(); setupModalLogic(); setLanguage('es');
-      setupEventListeners(); checkSystemDarkMode();
-    });
-  </script>
+<script src="script.js"></script>
+  
 </body>
 </html>
+
+<!-- <p>Herramienta en fase beta(inicial) por Kevin Posso Hurtado / Corregido con IA </p> -->
